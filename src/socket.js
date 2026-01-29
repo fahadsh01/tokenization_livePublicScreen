@@ -1,5 +1,13 @@
+
 import { io } from "socket.io-client";
 
-export const socket = io(import.meta.env.VITE_API_URL, {
-  withCredentials: true,
-});
+const socket = io(
+  "https://tokenizationbackend-production.up.railway.app",
+  {
+    path: "/socket.io",
+    withCredentials: true,
+    transports: ["websocket", "polling"],
+  }
+);
+
+export default socket;
