@@ -59,30 +59,44 @@ function PublicTokenScreen() {
     fetchInitialToken();
   }, [tenantId, isExpired]);
 
-  /* Socket updates (NO expiry logic here) */
-  useEffect(() => {
-    if (!tenantId || isExpired) return;
+ useEffect(() => {
+  if (!tenantId || isExpired) return;
 
+  const onConnect = () => {
+    console.log("🟢 socket connected, joining hospital:", tenantId);
     socket.emit("join-hospital", tenantId);
+  };
 
-    const handler = (data) => {
-      const newToken = data.currentToken ?? null;
+  socket.on("connect", onConnect);
 
-      if (prevTokenRef.current !== null && prevTokenRef.current !== newToken) {
-        audioRef.current?.play().catch(() => {});
-        setBlink(true);
-        setTimeout(() => setBlink(false), 800);
-      }
+  const handler = (data) => {
+    console.log("📥 token:update received:", data);
 
-      prevTokenRef.current = newToken;
-      setCurrentToken(newToken);
-      setNextToken(data.nextToken ?? null);
-      if (data.state) setMessage(getMessageFromState(data.state, lang));
-    };
+    const newToken = data.currentToken ?? null;
 
-    socket.on("token:update", handler);
-    return () => socket.off("token:update", handler);
-  }, [tenantId, isExpired, lang]);
+    if (prevTokenRef.current !== null && prevTokenRef.current !== newToken) {
+      audioRef.current?.play().catch(() => {});
+      setBlink(true);
+      setTimeout(() => setBlink(false), 800);
+    }
+
+    prevTokenRef.current = newToken;
+    setCurrentToken(newToken);
+    setNextToken(data.nextToken ?? null);
+
+    if (data.state) {
+      setMessage(getMessageFromState(data.state, lang));
+    }
+  };
+
+  socket.on("token:update", handler);
+
+  return () => {
+    socket.off("connect", onConnect);
+    socket.off("token:update", handler);
+  };
+}, [tenantId, isExpired, lang]);
+
 
   /* Clock */
   useEffect(() => {
