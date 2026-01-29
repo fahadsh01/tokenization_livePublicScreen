@@ -10,4 +10,3 @@ const socket = io(
 );
 
 export default socket;
-sssssss

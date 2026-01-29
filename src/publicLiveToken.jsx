@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { socket } from "./socket";
+import  socket from "./socket"
 import axios  from "axios";
 function PublicTokenScreen() {
   const { tenantId } = useParams();
