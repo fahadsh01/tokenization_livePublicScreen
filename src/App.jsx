@@ -1,10 +1,14 @@
-import React from "react";
-import PublicTokenScreen from "./publicLiveToken";
+import { Routes, Route } from "react-router-dom";
+import PublicTokenScreen from "./PublicTokenScreen";
+
 function App() {
   return (
-    <>
-    <PublicTokenScreen />
-    </>
+    <Routes>
+      <Route
+        path="/public/:tenantId"
+        element={<PublicTokenScreen />}
+      />
+    </Routes>
   );
 }
 
