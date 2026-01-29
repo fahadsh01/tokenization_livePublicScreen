@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { socket } from "./socket";
-import axiosInstance from "./axiosinstance";
-
+import axios  from "axios";
 function PublicTokenScreen() {
   const { tenantId } = useParams();
   const [searchParams] = useSearchParams();
@@ -38,8 +37,8 @@ function PublicTokenScreen() {
 
     const fetchInitialToken = async () => {
       try {
-        const res = await axiosInstance.get(
-          `/appointment/${tenantId}/publicLiveToken`
+        const res = await axios.get(
+          `https://tokenizationbackend-production.up.railway.app/api/v1/appointment/${tenantId}/publicLiveToken`
         );
 
         const data = res.data.data;
