@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import PublicTokenScreen from "./PublicTokenScreen";
+import PublicTokenScreen from "./publicLiveToken";
 
 function App() {
   return (
