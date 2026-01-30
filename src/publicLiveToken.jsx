@@ -16,11 +16,22 @@ function PublicTokenScreen() {
   const [dateTime, setDateTime] = useState(new Date());
   const prevTokenRef = useRef(null);
   const audioRef = useRef(null);
-   useEffect(() => {
+
+  /* 🔒 INITIAL EXPIRY CHECK — ONLY ON PAGE LOAD */
+  useEffect(() => {
+    if (!exp || Date.now() > Number(exp)) {
+      setIsExpired(true);
+    }
+  }, [exp]);
+
+  /* Audio init */
+  useEffect(() => {
     audioRef.current = new Audio("/notification.wav");
   }, []);
 
+  /* Initial API fetch (NO lang dependency) */
   useEffect(() => {
+    if (!tenantId || isExpired) return;
 
     const fetchInitialToken = async () => {
       try {
@@ -44,10 +55,11 @@ function PublicTokenScreen() {
     };
 
     fetchInitialToken();
-  }, [tenantId, ]);
+  }, [tenantId, isExpired]);
 
  useEffect(() => {
-  if (!tenantId ) return;
+  if (!tenantId || isExpired) return;
+
   const onConnect = () => {
     console.log("🟢 socket connected, joining hospital:", tenantId);
     socket.emit("join-hospital", tenantId);
@@ -81,7 +93,7 @@ function PublicTokenScreen() {
     socket.off("connect", onConnect);
     socket.off("token:update", handler);
   };
-}, [tenantId,]);
+}, [tenantId, isExpired,]);
 
 
   /* Clock */
@@ -89,6 +101,24 @@ function PublicTokenScreen() {
     const timer = setInterval(() => setDateTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
+
+  /* 🔴 EXPIRED SCREEN */
+  if (isExpired) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-100">
+        <div className="bg-white px-6 py-5 rounded-xl shadow text-center max-w-md">
+          <h2 className="text-2xl font-bold text-red-600 mb-2">
+            Link Expired
+          </h2>
+          <p className="text-slate-600">
+            This token display link was valid until midnight.
+            Please request a new link.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col items-center bg-slate-100 px-4 py-6 space-y-4">
       {/* Header */}
