@@ -5,7 +5,7 @@ function App() {
   return (
     <Routes>
       <Route
-        path="/public/:tenantId"
+        path="/:tenantId/publicLiveToken"
         element={<PublicTokenScreen />}
       />
     </Routes>
