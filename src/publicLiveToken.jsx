@@ -24,12 +24,10 @@ function PublicTokenScreen() {
     }
   }, [exp]);
 
-  /* Audio init */
   useEffect(() => {
     audioRef.current = new Audio("/notification.wav");
   }, []);
 
-  /* Initial API fetch (NO lang dependency) */
   useEffect(() => {
     if (!tenantId || isExpired) return;
 
