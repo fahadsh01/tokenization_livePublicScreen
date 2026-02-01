@@ -81,7 +81,6 @@ function PublicTokenScreen() {
       prevTokenRef.current = newToken;
       setCurrentToken(newToken);
       setNextToken(data.nextToken ?? null);
-      setRemainingTokens(data.remainingTokens ?? []);
 
       if (data.state) {
         setMessage(getMessageFromState(data.state, lang));
