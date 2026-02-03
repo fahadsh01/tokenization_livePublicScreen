@@ -217,7 +217,7 @@ function PublicTokenScreen() {
     href="https://sysvon.com"
     target="_blank"
     rel="noopener noreferrer"
-    className="font-medium text-slate-600 hover:text-emerald-600 transition"
+    className="font-medium text-slate-600 hover:text-blue-600 transition"
   >
     Sysvon Digital Solution
   </a>
