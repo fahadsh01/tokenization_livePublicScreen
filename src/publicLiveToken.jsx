@@ -17,6 +17,7 @@ function PublicTokenScreen() {
   const [lang, setLang] = useState("en");
   const [blink, setBlink] = useState(false);
   const [dateTime, setDateTime] = useState(new Date());
+  const[publicNotice,setPublicNotice]=useState("")
 
   const prevTokenRef = useRef(null);
   const audioRef = useRef(null);
@@ -42,14 +43,13 @@ function PublicTokenScreen() {
           `https://tokenizationbackend-production.up.railway.app/api/v1/appointment/${tenantId}/publicLiveToken`
         );
 
-        const data = res.data.data;
 
-        setCurrentToken(data.currentToken ?? null);
-        setNextToken(data.nextToken ?? null);
-        setRemainingTokens(data.remainingTokens ?? []);
-        setHospital(data.hospital ?? null);
-        setMessage(getMessageFromState(data.state, lang));
-
+        setCurrentToken(res.data.data.currentToken ?? null);
+        setNextToken(res.data.data.nextToken ?? null);
+        setRemainingTokens(res.data.data.remainingTokens ?? []);
+        setHospital(res.data.data.hospital ?? null);
+        setMessage(getMessageFromState(res.data.data.state, lang));
+       setPublicNotice(res.data.data.message)
         prevTokenRef.current = data.currentToken ?? null;
       } catch {
         setMessage(
@@ -147,6 +147,34 @@ function PublicTokenScreen() {
           {message}
         </div>
       )}
+{/* Public Notice Board */}
+{publicNotice && (
+  <div
+    className={`
+      w-full max-w-5xl
+      px-6 py-4
+      rounded-xl
+      text-center
+      font-semibold
+      shadow
+      border
+      ${
+        publicNotice.type === "EMERGENCY"
+          ? "bg-red-50 border-red-300 text-red-800 animate-pulse"
+          : publicNotice.type === "WARNING"
+          ? "bg-amber-50 border-amber-300 text-amber-800"
+          : "bg-emerald-50 border-emerald-300 text-emerald-800"
+      }
+    `}
+  >
+    <div className="flex items-center justify-center gap-2 text-lg">
+      {publicNotice.type === "EMERGENCY" && "🚨"}
+      {publicNotice.type === "WARNING" && "⚠️"}
+      {publicNotice.type === "INFO" && "ℹ️"}
+      <span>{publicNotice.message}</span>
+    </div>
+  </div>
+)}
 
       {/* Main Display */}
       <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-6">
