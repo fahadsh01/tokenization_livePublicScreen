@@ -44,12 +44,12 @@ function PublicTokenScreen() {
         );
 
     console.log(res)
-        setCurrentToken(res.data.currentToken ?? null);
-        setNextToken(res.data.nextToken ?? null);
-        setRemainingTokens(res.data.remainingTokens ?? []);
-        setHospital(res.data.hospital ?? null);
-        setMessage(getMessageFromState(res.data.state, lang));
-       setPublicNotice(res.data.message)
+        setCurrentToken(res.data.data.currentToken ?? null);
+        setNextToken(res.data.data.nextToken ?? null);
+        setRemainingTokens(res.data.data.remainingTokens ?? []);
+        setHospital(res.data.data.hospital ?? null);
+        setMessage(getMessageFromState(res.data.data.state, lang));
+       setPublicNotice(res.data.data.message)
         prevTokenRef.current = data.currentToken ?? null;
       } catch {
         setMessage(
