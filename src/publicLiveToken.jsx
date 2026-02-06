@@ -12,12 +12,12 @@ function PublicTokenScreen() {
   const [currentToken, setCurrentToken] = useState(null);
   const [nextToken, setNextToken] = useState(null);
   const [remainingTokens, setRemainingTokens] = useState([]);
-  const [hospital, setHospital] = useState(null);
+  const [hospital, setHospital] = useState({});
   const [message, setMessage] = useState("");
   const [lang, setLang] = useState("en");
   const [blink, setBlink] = useState(false);
   const [dateTime, setDateTime] = useState(new Date());
-  const[publicNotice,setPublicNotice]=useState(null)
+  const[publicNotice,setPublicNotice]=useState({})
 
   const prevTokenRef = useRef(null);
   const audioRef = useRef(null);
@@ -43,13 +43,11 @@ function PublicTokenScreen() {
           `https://tokenizationbackend-production.up.railway.app/api/v1/appointment/${tenantId}/publicLiveToken`
         );
 
-    console.log(res.data.data)
         setCurrentToken(res.data.data.currentToken ?? null);
         setNextToken(res.data.data.nextToken ?? null);
         setRemainingTokens(res.data.data.remainingTokens ?? []);
         setHospital(res.data.data.hospital ?? null);
-        setMessage(getMessageFromState(res.data.data.state, lang));
-       setPublicNotice(res.data.message)
+        setPublicNotice(res.data.data.message)
         prevTokenRef.current = data.currentToken ?? null;
         console.log(currentToken,nextToken,remainingTokens,hospital,message,publicNotice)
       } catch {
@@ -62,7 +60,7 @@ function PublicTokenScreen() {
     };
 
     fetchInitialToken();
-  }, [tenantId, isExpired, lang]);
+  }, [tenantId, isExpired,]);
 
   /* Socket updates */
   useEffect(() => {
@@ -82,10 +80,6 @@ function PublicTokenScreen() {
       prevTokenRef.current = newToken;
       setCurrentToken(newToken);
       setNextToken(data.nextToken ?? null);
-
-      if (data.state) {
-        setMessage(getMessageFromState(data.state, lang));
-      }
     };
 
     socket.on("token:update", handler);
@@ -123,8 +117,8 @@ function PublicTokenScreen() {
       {/* Header */}
       <div className="w-full max-w-5xl flex justify-between items-center bg-white px-6 py-4 rounded-lg shadow">
         <div>
-          <h2 className="text-xl font-bold">{hospital ?? "Hospital"}</h2>
-          <p className="text-slate-500">{hospital?.department ?? "Token Display"}</p>
+          <h2 className="text-xl font-bold">{hospital.hospitalname ?? "Hospital"}</h2>
+          <p className="text-slate-500">{ "Token Display"}</p>
         </div>
         <div className="font-mono font-semibold">
           {dateTime.toLocaleDateString()} • {dateTime.toLocaleTimeString()}
