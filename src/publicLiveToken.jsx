@@ -49,7 +49,7 @@ function PublicTokenScreen() {
         setRemainingTokens(res.data.data.remainingTokens ?? []);
         setHospital(res.data.data.hospital ?? null);
         setMessage(getMessageFromState(res.data.data.state, lang));
-       setPublicNotice(res.data.data.message)
+       setPublicNotice(res.data.message)
         prevTokenRef.current = data.currentToken ?? null;
         console.log(currentToken,nextToken,remainingTokens,hospital,message,publicNotice)
       } catch {
