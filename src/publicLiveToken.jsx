@@ -17,7 +17,7 @@ function PublicTokenScreen() {
   const [lang, setLang] = useState("en");
   const [blink, setBlink] = useState(false);
   const [dateTime, setDateTime] = useState(new Date());
-  const[publicNotice,setPublicNotice]=useState("")
+  const[publicNotice,setPublicNotice]=useState(null)
 
   const prevTokenRef = useRef(null);
   const audioRef = useRef(null);
