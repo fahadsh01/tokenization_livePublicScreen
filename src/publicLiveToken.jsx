@@ -51,6 +51,7 @@ function PublicTokenScreen() {
         setMessage(getMessageFromState(res.data.data.state, lang));
        setPublicNotice(res.data.data.message)
         prevTokenRef.current = data.currentToken ?? null;
+        console.log(currentToken,nextToken,remainingTokens,hospital,message,publicNotice)
       } catch {
         setMessage(
           lang === "en"
