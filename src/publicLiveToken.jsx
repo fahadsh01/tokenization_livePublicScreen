@@ -43,7 +43,7 @@ function PublicTokenScreen() {
           `https://tokenizationbackend-production.up.railway.app/api/v1/appointment/${tenantId}/publicLiveToken`
         );
 
-    console.log(res)
+    console.log(res.data.data)
         setCurrentToken(res.data.data.currentToken ?? null);
         setNextToken(res.data.data.nextToken ?? null);
         setRemainingTokens(res.data.data.remainingTokens ?? []);
