@@ -7,7 +7,7 @@ function PublicTokenScreen() {
   const { tenantId } = useParams();
   const [searchParams] = useSearchParams();
   const exp = searchParams.get("e");
-
+  const [loading, setLoading] = useState(false);
   const [isExpired, setIsExpired] = useState(false);
   const [currentToken, setCurrentToken] = useState(null);
   const [nextToken, setNextToken] = useState(null);
@@ -36,7 +36,7 @@ function PublicTokenScreen() {
   /* Initial fetch */
   useEffect(() => {
     if (!tenantId || isExpired) return;
-
+setLoading(true)
     const fetchInitialToken = async () => {
       try {
         const res = await axios.get(
@@ -56,7 +56,9 @@ function PublicTokenScreen() {
             ? "Unable to load token information"
             : "ٹوکن کی معلومات حاصل نہیں ہو سکیں"
         );
-      }
+      }finally {
+      setLoading(false);
+    }
     };
 
     fetchInitialToken();
@@ -124,7 +126,11 @@ function PublicTokenScreen() {
           {dateTime.toLocaleDateString()} • {dateTime.toLocaleTimeString()}
         </div>
       </div>
-
+{loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <span className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
       {/* Language */}
       <button
         onClick={() => setLang(lang === "en" ? "ur" : "en")}
