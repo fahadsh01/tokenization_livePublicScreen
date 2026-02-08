@@ -50,7 +50,7 @@ function PublicTokenScreen() {
         setPublicNotice(res.data.data.message)
         prevTokenRef.current = data.currentToken ?? null;
         console.log(currentToken,nextToken,remainingTokens,hospital,message,publicNotice)
-      } catch {
+      } catch (err) {
         setMessage(
           lang === "en"
             ? "Unable to load token information"
