@@ -24,19 +24,19 @@ function PublicTokenScreen() {
 
   /* 🔒 Expiry check */
   useEffect(() => {
+    setLoading(true)
+
     if (!exp || Date.now() > Number(exp)) {
       setIsExpired(true);
+      setLoading(false);
     }
   }, [exp]);
 
   useEffect(() => {
     audioRef.current = new Audio("/notification.wav");
   }, []);
-
-  /* Initial fetch */
   useEffect(() => {
     if (!tenantId || isExpired) return;
-setLoading(true)
     const fetchInitialToken = async () => {
       try {
         const res = await axios.get(
@@ -56,9 +56,7 @@ setLoading(true)
             ? "Unable to load token information"
             : "ٹوکن کی معلومات حاصل نہیں ہو سکیں"
         );
-      }finally {
-      setLoading(false);
-    }
+      }
     };
 
     fetchInitialToken();
