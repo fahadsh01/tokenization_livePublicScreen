@@ -120,11 +120,10 @@ function PublicTokenScreen() {
           {dateTime.toLocaleDateString()} • {dateTime.toLocaleTimeString()}
         </div>
       </div>
-{loading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <span className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin" />
-        </div>
-      )}
+
+
+
+      
       {/* Language */}
       <button
         onClick={() => setLang(lang === "en" ? "ur" : "en")}
