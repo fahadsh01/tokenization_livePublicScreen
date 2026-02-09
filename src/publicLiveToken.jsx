@@ -2,12 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import socket from "./socket";
 import axios from "axios";
-
 function PublicTokenScreen() {
   const { tenantId } = useParams();
   const [searchParams] = useSearchParams();
   const exp = searchParams.get("e");
-  const [loading, setLoading] = useState(false);
   const [isExpired, setIsExpired] = useState(false);
   const [currentToken, setCurrentToken] = useState(null);
   const [nextToken, setNextToken] = useState(null);
@@ -24,11 +22,8 @@ function PublicTokenScreen() {
 
   /* 🔒 Expiry check */
   useEffect(() => {
-    setLoading(true)
-
     if (!exp || Date.now() > Number(exp)) {
       setIsExpired(true);
-      setLoading(false);
     }
   }, [exp]);
 
@@ -37,6 +32,7 @@ function PublicTokenScreen() {
   }, []);
   useEffect(() => {
     if (!tenantId || isExpired) return;
+    setMessage("")
     const fetchInitialToken = async () => {
       try {
         const res = await axios.get(
