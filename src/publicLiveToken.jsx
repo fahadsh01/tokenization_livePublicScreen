@@ -30,33 +30,39 @@ function PublicTokenScreen() {
   useEffect(() => {
     audioRef.current = new Audio("/notification.wav");
   }, []);
-  useEffect(() => {
-    if (!tenantId || isExpired) return;
-    setMessage("")
-    const fetchInitialToken = async () => {
-      try {
-        const res = await axios.get(
-          `https://tokenizationbackend-production.up.railway.app/api/v1/appointment/${tenantId}/publicLiveToken`
-        );
+useEffect(() => {
+  if (!tenantId || isExpired) return;
 
-        setCurrentToken(res.data.data.currentToken ?? null);
-        setNextToken(res.data.data.nextToken ?? null);
-        setRemainingTokens(res.data.data.remainingTokens ?? []);
-        setHospital(res.data.data.hospital ?? null);
-        setPublicNotice(res.data.data.message)
-        prevTokenRef.current = data.currentToken ?? null;
-        console.log(currentToken,nextToken,remainingTokens,hospital,message,publicNotice)
-      } catch (err) {
-        setMessage(
-          lang === "en"
-            ? "Unable to load token information"
-            : "ٹوکن کی معلومات حاصل نہیں ہو سکیں"
-        );
-      }
-    };
+  setMessage("");
 
-    fetchInitialToken();
-  }, [tenantId, isExpired,]);
+  const fetchInitialToken = async () => {
+    try {
+      const res = await axios.get(
+        `https://tokenizationbackend-production.up.railway.app/api/v1/appointment/${tenantId}/publicLiveToken`
+      );
+
+      const data = res.data.data;
+
+      setCurrentToken(data.currentToken ?? null);
+      setNextToken(data.nextToken ?? null);
+      setRemainingTokens(data.remainingTokens ?? []);
+      setHospital(data.hospital ?? null);
+      setPublicNotice(data.message ?? "");
+
+      prevTokenRef.current = data.currentToken ?? null;
+    } catch (err) {
+      console.error(err);
+      setMessage(
+        lang === "en"
+          ? "Unable to load token information"
+          : "ٹوکن کی معلومات حاصل نہیں ہو سکیں"
+      );
+    }
+  };
+
+  fetchInitialToken();
+}, [tenantId, isExpired]);
+
 
   /* Socket updates */
   useEffect(() => {
@@ -123,7 +129,7 @@ function PublicTokenScreen() {
 
 
 
-      
+
       {/* Language */}
       <button
         onClick={() => setLang(lang === "en" ? "ur" : "en")}
